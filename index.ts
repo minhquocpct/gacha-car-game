@@ -1,12 +1,25 @@
 import fastify from 'fastify'
+import Redis from 'ioredis';
+import 'dotenv/config';
 
 const server = fastify()
+const redisPort = process.env.REDIS_PORT
+const redisHost = process.env.REDIS_HOST
 
-server.get('/ping', async (request, reply) => {
-  return 'pong\n'
+try {
+  new Redis({
+    port: redisPort,
+    host: redisHost,
+  }); 
+} catch (error) {
+  console.log(error)
+}
+
+server.get('/', async (request, reply) => {
+  reply.send("Hello, Ubisoft Da Nang")
 })
 
-server.listen({ port: 8080 }, (err, address) => {
+server.listen({ port: 3000 }, (err, address) => {
   if (err) {
     console.error(err)
     process.exit(1)
